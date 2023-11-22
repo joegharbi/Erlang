@@ -64,6 +64,7 @@ if __name__ == "__main__":
         c_threads.append(c_thread)
         c_thread.start()
         time.sleep(0.1)
+        # print(threading.active_count())
 
     # Start Erlang threads concurrently
     for i in range(1, num_clients + 1):
@@ -71,10 +72,16 @@ if __name__ == "__main__":
         erlang_threads.append(erlang_thread)
         erlang_thread.start()
         time.sleep(0.1)
+    
+    
+    # print(threading.active_count())
+    # print(threading.enumerate())
+
 
     # Wait for all C threads to complete
     for c_thread in c_threads:
         c_thread.join()
+
 
     # Wait for all Erlang threads to complete
     for erlang_thread in erlang_threads:
