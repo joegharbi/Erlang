@@ -1,0 +1,9 @@
+.vscode/*
+.git/*
+*.beam
+erl_crash.dump
+*.exe
+# *.json
+# *.csv
+# *.dat
+# *tex
