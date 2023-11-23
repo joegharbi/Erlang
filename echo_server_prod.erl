@@ -13,7 +13,7 @@ loop(ListenSocket) ->
     case gen_tcp:accept(ListenSocket) of
         {ok, Socket} ->
             % spawn(fun() -> loop(ListenSocket) end),
-            io:format("Handling client on ~p ~n", [Socket]),
+            % io:format("Handling clients on ~p ~n", [Socket]),
             spawn(fun() -> handle_client(Socket) end),
             loop(ListenSocket);
             % handle_client(Socket);

@@ -52,21 +52,22 @@ def erlang_client_thread(message, host, port_erlang):
 #         erlang_thread.join()  # Wait for the Erlang thread to complete
 
 
-command = "scaphandre json -n 100000000 -f report_100000.json"
 
 # def run_command(command):
 #     process = subprocess.Popen(command, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 #     return process
 
-def run_command(command, pid_queue):
-    process = subprocess.Popen(command, shell=True)
-    pid_queue.put(process.pid)
-    process.wait()
+# def run_command(command, pid_queue):
+#     process = subprocess.Popen(command, shell=True)
+#     pid_queue.put(process.pid)
+#     process.wait()
 
 if __name__ == "__main__":
     message = "Hello, Servers!"
     host = "localhost"
     num_clients = 2
+    
+    command = "scaphandre json -n 100000000 -f report_100000.json"
 
     port_c = 54321  # Port for the C server
     port_erlang = 12345  # Port for the Erlang server
@@ -77,12 +78,12 @@ if __name__ == "__main__":
     # # Start the command in the background
     # process = run_command(command)
 
-    # Create a multiprocessing queue to share the PID
-    pid_queue = multiprocessing.Queue()
+    # # Create a multiprocessing queue to share the PID
+    # pid_queue = multiprocessing.Queue()
 
-    # Create a process to run the command
-    process = multiprocessing.Process(target=run_command, args=(command, pid_queue))
-    process.start()
+    # # Create a process to run the command
+    # process = multiprocessing.Process(target=run_command, args=(command, pid_queue))
+    # process.start()
     
     # # Start the command in the background
     # process = subprocess.Popen(command, shell=True)
@@ -90,7 +91,24 @@ if __name__ == "__main__":
     # # Wait for some time (e.g., 10 seconds)
     # time.sleep(10)
 
+    # # Spawn a new process
+    # process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+    proc = subprocess.Popen(["scaphandre", "json", "-n", "100000000", "-f", "report_100000.json"])
+
+
+    # # Get the PID of the newly spawned process
+    # pid = process.pid
+    # print(f"Newly spawned process PID: {pid}")
+    print("starting measurement")
+
+    # # Get the parent process
+    # parent = psutil.Process(proc.pid)
+
+    # Get the parent process
+    parent = psutil.Process(proc.pid)
     
+
 
     # Start C threads
     for i in range(1, num_clients + 1):
@@ -121,6 +139,25 @@ if __name__ == "__main__":
     for erlang_thread in erlang_threads:
         erlang_thread.join()
 
+    print("killing")
+    # Kill the child processes
+    for child in parent.children(recursive=True):
+        child.kill()
+
+    # Kill the parent process
+    parent.kill()
+
+    # # Kill the process
+    # os.kill(proc.pid, signal.SIGTERM)
+    # # Kill the process
+    # os.kill(proc.pid, signal.SIGKILL)
+
+    # # Kill the process later (replace 'SIGTERM' with 'SIGKILL' if needed)
+    # os.kill(pid, 15)  # 15 corresponds to the 'SIGTERM' signal
+
+    print("Killed")
+
+
     # # Wait for the process to finish
     # process.wait()
 
@@ -139,7 +176,7 @@ if __name__ == "__main__":
     # Get the process ID (PID) of the started command
     # pid = process.pid
 
-    # Stop the Python program
+    # # Stop the Python program
     # sys.exit()
 
     # Terminate the process by PID
@@ -174,17 +211,17 @@ if __name__ == "__main__":
     #     pass
 
 
-    try:
-        # Get the PID from the queue
-        pid = pid_queue.get()
+    # try:
+    #     # Get the PID from the queue
+    #     pid = pid_queue.get()
 
-        # Get the process by PID
-        process_to_terminate = psutil.Process(pid)
+    #     # Get the process by PID
+    #     process_to_terminate = psutil.Process(pid)
 
-        # Terminate the process
-        process_to_terminate.terminate()
+    #     # Terminate the process
+    #     process_to_terminate.terminate()
 
-        # Optionally, wait for the process to complete
-        process_to_terminate.wait(timeout=5)
-    except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
-        pass  # Process may have already terminated or cannot be terminated
+    #     # Optionally, wait for the process to complete
+    #     process_to_terminate.wait(timeout=5)
+    # except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
+    #     pass  # Process may have already terminated or cannot be terminated
