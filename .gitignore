@@ -3,7 +3,7 @@
 *.beam
 erl_crash.dump
 *.exe
-# *.json
+*.json
 # *.csv
 # *.dat
 # *tex

@@ -38,7 +38,7 @@ if __name__ == "__main__":
     
     message = "Hello, Servers!"
     host = "localhost"
-    num_clients = 100000
+    num_clients = 10000
 
     port_c = 54321  # Port for the C server
     port_erlang = 12345  # Port for the Erlang server
@@ -59,7 +59,6 @@ if __name__ == "__main__":
         erlang_thread.start()
 
     # Wait for all threads to complete
-    # for erlang_thread in zip(erlang_threads):
     for c_thread, erlang_thread in zip(c_threads, erlang_threads):
         c_thread.join()
         erlang_thread.join()
