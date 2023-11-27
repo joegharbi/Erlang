@@ -1,7 +1,7 @@
 import json
 
 # Specify the path to your JSON file
-json_file_path = "c:\\phd\\Erlang\\report2_10000.json"
+json_file_path = "c:\\phd\\Erlang\\report_C_100000_server.json"
 
 # Read JSON data from the file
 with open(json_file_path, "r") as file:
@@ -19,7 +19,7 @@ for entry in data:
         consumption = consumer.get("consumption", 0.0)
         
         # Check if the executable is "server.exe" or "erl.exe"
-        if "server.exe" in exe.lower():
+        if "a.exe" in exe.lower():
             total_server_consumption += consumption
         elif "erl.exe" in exe.lower():
             total_erl_consumption += consumption
