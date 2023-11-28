@@ -25,16 +25,15 @@ if __name__ == "__main__":
 
     message = "Hello, Servers!"
     host = "localhost"
-
-    num_clients = 10
-    server_name = "server_old"
-    file_name = f"report_{server_name}_{num_clients}"
+    num_clients = 100000
     
     # scaphandre json -s 0 -n 100000 -m 100 -f
     # command = "scaphandre json -n 100000000 -m 100 -f report_C_100000.json"
-    command = "scaphandre json -n 100000 -f "+file_name+".json"
-    process = subprocess.Popen(command,stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT, shell= True)
-    time.sleep(5)
+    command = "scaphandre json -n 100000 -m 100 -f report_C_100000_server.json"
+
+    process = subprocess.Popen(command, shell= True)
+
+    time.sleep(10)
 
     port_c = 54321  # Port for the C server
 
