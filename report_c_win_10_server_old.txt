@@ -1,0 +1,3 @@
+The runtime of report_c_win_10_server_old is: 1.0177466869354248 seconds
+Total consumption of server_old.exe: 0.0
+Total samples of server_old.exe: 0
