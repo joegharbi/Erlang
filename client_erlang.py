@@ -27,9 +27,9 @@ def erlang_client_thread(message, host, port_erlang):
 if __name__ == "__main__":
     message = "Hello, Servers!"
     host = "localhost"
-    num_clients = 2
+    num_clients = 10000
     
-    command = "scaphandre json -n 100000000 -f report_Erlang_100000.json"
+    command = "scaphandre json -n 100000 -f report_Erlang_10000.json"
 
     process = subprocess.Popen(command, shell= True)
 
