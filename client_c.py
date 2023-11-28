@@ -23,11 +23,11 @@ def c_client_thread(message, host, port_c):
 if __name__ == "__main__":
     message = "Hello, Servers!"
     host = "localhost"
-    num_clients = 100000
+    num_clients = 10000
     
     # scaphandre json -s 0 -n 100000 -m 100 -f
     # command = "scaphandre json -n 100000000 -m 100 -f report_C_100000.json"
-    command = "scaphandre json -n 100000 -m 100 -f report_C_100000_server.json"
+    command = "scaphandre json -n 100000 -f report_c_win_10000_server.json"
 
     process = subprocess.Popen(command, shell= True)
 
