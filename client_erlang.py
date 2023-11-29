@@ -71,6 +71,7 @@ if __name__ == "__main__":
     # Initialize total consumption variables
     total_server_consumption = 0.0
     number_samples = 0
+    average_energy = 0
 
     # Iterate through entries
     for entry in data:
@@ -83,6 +84,8 @@ if __name__ == "__main__":
             if f"{server_name}.exe" in exe.lower() and consumption != 0.0:
                 total_server_consumption += consumption
                 number_samples +=1
+    if (number_samples != 0):
+        average_energy = total_server_consumption / number_samples
 
     # Print the results
     # print("Total consumption of server_old.exe:", total_server_consumption)
@@ -93,6 +96,7 @@ if __name__ == "__main__":
         f.write(f"The runtime of {file_name} is: {runtime} seconds\n")
         f.write(f"Total consumption of {server_name}: {total_server_consumption}\n")
         f.write(f"Total samples of {server_name}: {number_samples}\n")
+        f.write(f"Average consumption of {server_name}: {average_energy}\n")
         
 
     # Exit the program
