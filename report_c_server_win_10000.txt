@@ -1,0 +1,4 @@
+The runtime of report_c_server_win_10000 is: 1016.7020876407623 seconds
+Total consumption of c_server_win: 45294.4236
+Total samples of c_server_win: 12
+Average consumption of c_server_win: 3774.5353

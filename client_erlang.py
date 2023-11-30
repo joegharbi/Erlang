@@ -29,7 +29,7 @@ if __name__ == "__main__":
     message = "Hello, Servers!"
     host = "localhost"
 
-    num_clients = 10
+    num_clients = 100
     server_name = "erl"
     file_name = f"report_{server_name}_{num_clients}"
     
@@ -57,7 +57,7 @@ if __name__ == "__main__":
 
     end_time = time.time()
 
-    runtime = end_time - start_time
+    runtime = end_time - start_time - (num_clients * 0.1)
 
     # Then kill the process
     subprocess.run(f'taskkill /F /IM scaphandre.exe', shell=True)
@@ -81,7 +81,7 @@ if __name__ == "__main__":
             consumption = consumer.get("consumption", 0.0)
             
             # Check the server consumption
-            if f"{server_name}.exe" in exe.lower() and consumption != 0.0:
+            if f"{server_name}.exe" in exe.lower():
                 total_server_consumption += consumption
                 number_samples +=1
     if (number_samples != 0):
