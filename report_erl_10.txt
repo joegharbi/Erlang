@@ -1,4 +1,4 @@
-The runtime of report_erl_10 is: 0.009870052337646484 seconds
+The runtime of report_erl_10 is: 0.01750636100769043 seconds
 Total consumption of erl: 0.0
-Total samples of erl: 1
-Average consumption of erl: 0.0
+Total samples of erl: 0
+Average consumption of erl: 0

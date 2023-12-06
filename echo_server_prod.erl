@@ -5,6 +5,7 @@ start() ->
     case gen_tcp:listen(12345, [binary, {packet, 0}, {active, false}, {reuseaddr, true}]) of
         {ok, ListenSocket} ->
             % spawn(fun() -> loop(ListenSocket) end);
+            io:format("Starting server ~n"),
             loop(ListenSocket);
         {error, Reason} ->
             io:format("Error starting server: ~p~n", [Reason])

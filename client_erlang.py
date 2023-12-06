@@ -9,7 +9,6 @@ import json
 # import psutil
 # import os
 
-
 def communicate_with_erlang_server(message, host, port):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as erlang_socket:
         erlang_socket.connect((host, port))
@@ -20,7 +19,6 @@ def communicate_with_erlang_server(message, host, port):
         # response = erlang_socket.recv(1024).decode()
         # print(f"Received from Erlang server: {response}")
 
-
 def erlang_client_thread(message, host, port_erlang):
     # print(f"Erlang Client sending message: {message}")
     communicate_with_erlang_server(message, host, port_erlang)
@@ -29,7 +27,7 @@ if __name__ == "__main__":
     message = "Hello, Servers!"
     host = "localhost"
 
-    num_clients = 100
+    num_clients = 10
     server_name = "erl"
     file_name = f"report_{server_name}_{num_clients}"
     

@@ -22,11 +22,11 @@ print("---- Starting 2nd measurement ----")
 
 erl_server_command =  "erl -noshell -run echo_server_prod"
 erl_proc = subprocess.Popen(erl_server_command, shell=True)
-time.sleep(10)
+time.sleep(5)
 
-erl_command = "python client_erlang.py"
-subprocess.call(['python', 'client_erlang.py'])
+# erl_command = "python client_erlang.py"
 # subprocess.Popen(erl_command, shell=True)
+subprocess.call(['python', 'client_erlang.py'])
 print("---- Finished 2nd measurement ----")
 time.sleep(5)
 

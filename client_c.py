@@ -57,8 +57,6 @@ if __name__ == "__main__":
 
     runtime = end_time - start_time - (num_clients * 0.1)
 
-    # print(f"The runtime of your code is: {runtime} seconds")
-
     # Then kill the process
     subprocess.run(f'taskkill /F /IM scaphandre.exe', shell=True)
 
@@ -81,7 +79,6 @@ if __name__ == "__main__":
             consumption = consumer.get("consumption", 0.0)
             
             # Check the server consumption
-            # if f"{server_name}.exe" in exe.lower() and consumption != 0.0:
             if f"{server_name}.exe" in exe.lower():
                 total_server_consumption += consumption
                 number_samples +=1
