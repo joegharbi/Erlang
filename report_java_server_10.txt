@@ -1,0 +1,4 @@
+The runtime of report_java_server_10 is: 0.016834020614624023 seconds
+Total consumption of java_server: 0.0
+Total samples of java_server: 0
+Average consumption of java_server: 0

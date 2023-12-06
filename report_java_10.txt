@@ -1,0 +1,4 @@
+The runtime of report_java_10 is: 0.018227338790893555 seconds
+Total consumption of java: 159204.05
+Total samples of java: 1
+Average consumption of java: 159204.05
