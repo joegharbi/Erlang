@@ -38,12 +38,13 @@ public class SimpleServer {
 
         // Read the message from the client
         String clientMessage = reader.readLine();
-        // System.out.println("Received from client " + clientSocket.getInetAddress() + ": " + clientMessage);
+        System.out.println("Received from client " + clientSocket.getInetAddress() + ": " + clientMessage);
 
         // Send the message back to the client
         String response = clientMessage;
         writer.println(response);
-        // System.out.println("Sent to client " + clientSocket.getInetAddress() + ": " + response);
+        // writer.println();
+        System.out.println("Sent to client " + clientSocket.getInetAddress() + ": " + response);
 
     } catch (SocketException se) {
         // Handle the SocketException (connection reset) gracefully

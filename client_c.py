@@ -28,13 +28,15 @@ if __name__ == "__main__":
     message = "Hello, Servers!"
     host = "localhost"
     
-    num_clients = 10
+    num_clients = 10000
     server_name = "c_server_win"
     file_name = f"report_{server_name}_{num_clients}"
 
-    # Start Java server
+    # Start C server
     subprocess.Popen(["c_server_win.exe"])
-    print("Started c server")
+    # print("Started c server")
+    time.sleep(5)
+
     
     # scaphandre json -s 0 -n 100000 -m 100 -f
     # command = "scaphandre json -n 100000000 -m 100 -f report_C_100000.json"

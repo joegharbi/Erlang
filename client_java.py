@@ -13,6 +13,8 @@ def communicate_with_java_server(message, host, port):
         java_socket.sendall(message.encode())
         java_socket.shutdown(socket.SHUT_WR)
         java_socket.recv(1024)
+        # response = java_socket.recv(1024)
+        # response = response.rstrip(b'\n')
         # print(f"Received from Java server: {response}")
         java_socket.close()
 
@@ -24,7 +26,7 @@ if __name__ == "__main__":
     host = "localhost"
     port_java = 6000  # Port for the Java server
 
-    num_clients = 100
+    num_clients = 10000
     server_name = "java"
     file_name = f"report_{server_name}_{num_clients}"
 
@@ -34,7 +36,7 @@ if __name__ == "__main__":
     process = subprocess.Popen(command,stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT, shell= True)
 
     # Start Java server
-    subprocess.Popen(["java", "SimpleServer.java"])
+    subprocess.Popen(["java", "SimpleServer"])
 
     time.sleep(5)
 

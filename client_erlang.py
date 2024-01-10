@@ -30,9 +30,14 @@ if __name__ == "__main__":
     message = "Hello, Servers!"
     host = "localhost"
 
-    num_clients = 1000
+    num_clients = 10000
     server_name = "erl"
     file_name = f"report_{server_name}_{num_clients}"
+
+    # Start Erlang server
+    erl_server_command =  "erl -noshell -run echo_server_prod"
+    erl_proc = subprocess.Popen(erl_server_command, shell=True)
+    time.sleep(5)
     
     # scaphandre json -s 0 -n 100000 -m 100 -f
     # command = "scaphandre json -n 100000000 -m 100 -f report_C_100000.json"
@@ -62,6 +67,8 @@ if __name__ == "__main__":
 
     # Then kill the process
     subprocess.run(f'taskkill /F /IM scaphandre.exe', shell=True)
+    # # Then kill the process
+    subprocess.run(f'taskkill /F /IM erl.exe', shell=True)
 
     json_file_path = f"c:\\phd\\Erlang\\{file_name}.json"
 
