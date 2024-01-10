@@ -1,9 +1,11 @@
+import csv
 import socket
 import subprocess
 import sys
 import time
 import threading
 import json
+import timeit
 # import multiprocessing
 # import signal
 # import psutil
@@ -45,7 +47,7 @@ if __name__ == "__main__":
     port_c = 54321  # Port for the C server
 
     c_threads = []    
-    start_time = time.time()
+    start_time = timeit.default_timer()
 
     # Start C threads
     for i in range(1, num_clients + 1):
@@ -59,7 +61,7 @@ if __name__ == "__main__":
     for c_thread in c_threads:
         c_thread.join()
 
-    end_time = time.time()
+    end_time = timeit.default_timer()
 
     runtime = end_time - start_time - (num_clients * 0.1)
 
@@ -93,16 +95,24 @@ if __name__ == "__main__":
     if (number_samples != 0):
         average_energy = total_server_consumption / number_samples
 
+    final_consumption = average_energy * runtime
+
+    # Write runtime and function name to the csv file
+    with open('c_output.csv', 'a', newline='') as csv_file:
+        csv_writer = csv.writer(csv_file, delimiter=';')
+        # csv_writer.writerow(['Function', 'Average Runtime'])
+        csv_writer.writerow([file_name, final_consumption, runtime])
+
     # Print the results
     # print("Total consumption of server_old.exe:", total_server_consumption)
 
-    # Open the file in write mode ('w')
-    with open(file_name+'.txt', 'w') as f:
-        # Write to the text file
-        f.write(f"The runtime of {file_name} is: {runtime} seconds\n")
-        f.write(f"Total consumption of {server_name}: {total_server_consumption}\n")
-        f.write(f"Total samples of {server_name}: {number_samples}\n")
-        f.write(f"Average consumption of {server_name}: {average_energy}\n")
+    # # Open the file in write mode ('w')
+    # with open(file_name+'.txt', 'w') as f:
+    #     # Write to the text file
+    #     f.write(f"The runtime of {file_name} is: {runtime} seconds\n")
+    #     f.write(f"Total consumption of {server_name}: {total_server_consumption}\n")
+    #     f.write(f"Total samples of {server_name}: {number_samples}\n")
+    #     f.write(f"Average consumption of {server_name}: {average_energy}\n")
         
 
     # Exit the program

@@ -1,9 +1,11 @@
+import csv
 import socket
 import subprocess
 import sys
 import time
 import threading
 import json
+import timeit
 
 def communicate_with_java_server(message, host, port):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as java_socket:
@@ -37,9 +39,9 @@ if __name__ == "__main__":
     time.sleep(5)
 
     java_threads = []
-    start_time = time.time()
+    start_time = timeit.default_timer()
 
-    print(f"sending from client")
+    # print(f"sending from client")
     # Start Java threads
     for i in range(1, num_clients + 1):
         java_thread = threading.Thread(target=java_client_thread, args=(message, host, port_java))
@@ -48,12 +50,12 @@ if __name__ == "__main__":
         time.sleep(0.1)
 
     # Wait for all Java threads to complete
-    print(f"waiting from server")
+    # print(f"waiting from server")
     for java_thread in java_threads:
-        print(f"thread from server")
+        # print(f"thread from server")
         java_thread.join()
 
-    end_time = time.time()
+    end_time = timeit.default_timer()
 
     runtime = end_time - start_time - (num_clients * 0.1)
 
@@ -88,16 +90,25 @@ if __name__ == "__main__":
     if (number_samples != 0):
         average_energy = total_server_consumption / number_samples
 
+    final_consumption = average_energy * runtime
+
+    # Write runtime and function name to the csv file
+    with open('java_output.csv', 'a', newline='') as csv_file:
+        csv_writer = csv.writer(csv_file, delimiter=';')
+        # csv_writer.writerow(['Function', 'Average Runtime'])
+        csv_writer.writerow([file_name, final_consumption, runtime])
+
+
     # Print the results
     # print("Total consumption of server_old.exe:", total_server_consumption)
 
-    # Open the file in write mode ('w')
-    with open(file_name+'.txt', 'w') as f:
-        # Write to the text file
-        f.write(f"The runtime of {file_name} is: {runtime} seconds\n")
-        f.write(f"Total consumption of {server_name}: {total_server_consumption}\n")
-        f.write(f"Total samples of {server_name}: {number_samples}\n")
-        f.write(f"Average consumption of {server_name}: {average_energy}\n")
+    # # Open the file in write mode ('w')
+    # with open(file_name+'.txt', 'w') as f:
+    #     # Write to the text file
+    #     f.write(f"The runtime of {file_name} is: {runtime} seconds\n")
+    #     f.write(f"Total consumption of {server_name}: {total_server_consumption}\n")
+    #     f.write(f"Total samples of {server_name}: {number_samples}\n")
+    #     f.write(f"Average consumption of {server_name}: {average_energy}\n")
         
 
     # Exit the program
