@@ -4,6 +4,7 @@
 erl_crash.dump
 *.exe
 *.json
+*.class
 # *.csv
 # *.dat
 # *tex
