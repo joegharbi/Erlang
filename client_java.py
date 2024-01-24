@@ -12,10 +12,10 @@ def communicate_with_java_server(message, host, port):
         java_socket.connect((host, port))
         java_socket.sendall(message.encode())
         java_socket.shutdown(socket.SHUT_WR)
-        java_socket.recv(1024)
-        # response = java_socket.recv(1024)
+        # java_socket.recv(1024)
+        response = java_socket.recv(1024)
         # response = response.rstrip(b'\n')
-        # print(f"Received from Java server: {response}")
+        print(f"Received from Java server: {response}")
         java_socket.close()
 
 def java_client_thread(message, host, port_c):
@@ -30,13 +30,16 @@ if __name__ == "__main__":
     server_name = "java"
     file_name = f"report_{server_name}_{num_clients}"
 
+    # Start Java server
+    subprocess.Popen(["java", "SimpleServer"])
+    time.sleep(5)
+
     # scaphandre json -s 0 -n 100000 -m 100 -f
     # command = "scaphandre json -n 100000000 -m 100 -f report_C_100000.json"
     command = "scaphandre json -n 100000 -f "+file_name+".json"
     process = subprocess.Popen(command,stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT, shell= True)
 
-    # Start Java server
-    subprocess.Popen(["java", "SimpleServer"])
+
 
     time.sleep(5)
 
@@ -49,7 +52,7 @@ if __name__ == "__main__":
         java_thread = threading.Thread(target=java_client_thread, args=(message, host, port_java))
         java_threads.append(java_thread)
         java_thread.start()
-        time.sleep(0.1)
+        # time.sleep(0.1)
 
     # Wait for all Java threads to complete
     # print(f"waiting from server")
@@ -59,7 +62,7 @@ if __name__ == "__main__":
 
     end_time = timeit.default_timer()
 
-    runtime = end_time - start_time - (num_clients * 0.1)
+    runtime = end_time - start_time 
 
     # Then kill the process
     subprocess.run(f'taskkill /F /IM scaphandre.exe', shell=True)
@@ -67,7 +70,7 @@ if __name__ == "__main__":
     # # Then kill the server
     subprocess.run(f'taskkill /F /IM java.exe', shell=True)
 
-    json_file_path = f"c:\\phd\\Erlang\\{file_name}.json"
+    json_file_path = f"c:\\phd\\New Folder\\Erlang\\{file_name}.json"
 
     # Read JSON data from the file
     with open(json_file_path, "r") as file:

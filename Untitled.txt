@@ -1,0 +1,11 @@
+
+(1) Erlang (programming language) - Wikipedia. https://en.wikipedia.org/wiki/Erlang_%28programming_language%29.
+(2) Why You Should Use Erlang in 2023 - Serokell Software Development Company. https://serokell.io/blog/introduction-to-erlang.
+(3) performance - Why is Erlang slower than Java on all these small math .... https://stackoverflow.com/questions/13629142/why-is-erlang-slower-than-java-on-all-these-small-math-benchmarks.
+(4) Erlang -- Processes. https://erlang.org/doc/reference_manual/processes.html.
+(5) "Why Use Erlang?" - an attempt at explaining its strength to ... - Reddit. https://www.reddit.com/r/programming/comments/jodcs/why_use_erlang_an_attempt_at_explaining_its/.
+(6) Getting Started with Erlang. https://erlang.org/documentation/doc-5.3/doc/getting_started/getting_started.html.
+(7) Erlang Calculator for Call Centre Staffing. https://www.callcentretools.com/tools/erlang-calculator/.
+(8) Erlang -- Efficiency Guide. https://erlang.org/doc/efficiency_guide/users_guide.html.
+(9) Erlang -- Profiling. https://erlang.org/doc/efficiency_guide/profiling.html.
+(10) en.wikipedia.org. https://en.wikipedia.org/wiki/Erlang_(programming_language).

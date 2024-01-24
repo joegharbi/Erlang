@@ -1,0 +1,11 @@
+erlang and c had more similarities when running the threads concurently without a wait time between the threads.
+Windows is limited by defeault to 5000+ tcp ports opened concurently.
+Erlang is also limited by the concurent ports in the Erl VM (default 1024).
+changing the erlang connection limits did not make a huge difference. system_limit shows 8000+
+
+when running the threads in wait mode there was some difference, but not as huge as mentioned in the benchmark game.
+Java sits between erlang and c.
+
+
+Fresh measurements
+data into tables
