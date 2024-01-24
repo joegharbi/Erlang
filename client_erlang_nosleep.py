@@ -102,7 +102,7 @@ if __name__ == "__main__":
     # print("Total consumption of server_old.exe:", total_server_consumption)
 
     # Write runtime and function name to the csv file
-    with open('erlang_output.csv', 'a', newline='') as csv_file:
+    with open('erlang_output_nosleep.csv', 'a', newline='') as csv_file:
         csv_writer = csv.writer(csv_file, delimiter=';')
         # csv_writer.writerow(['Function', 'Average Runtime'])
         csv_writer.writerow([file_name, final_consumption, runtime])

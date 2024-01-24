@@ -6,62 +6,56 @@ import time
 import threading
 import json
 import timeit
-# import multiprocessing
-# import signal
-# import psutil
-# import os
 
-def communicate_with_c_server(message, host, port):
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as c_socket:
-        c_socket.connect((host, port))
-        c_socket.sendall(message.encode())
-        c_socket.recv(1024)
-        # response = c_socket.recv(1024)
-        # print(f"Received from C server: {response}")
+def communicate_with_java_server(message, host, port):
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as java_socket:
+        java_socket.connect((host, port))
+        java_socket.sendall(message.encode())
+        java_socket.shutdown(socket.SHUT_WR)
+        java_socket.recv(1024)
+        # response = java_socket.recv(1024)
+        # response = response.rstrip(b'\n')
+        # print(f"Received from Java server: {response}")
+        java_socket.close()
 
-def c_client_thread(message, host, port_c):
-    # print(f"C Client sending message: {message}")
-    communicate_with_c_server(message, host, port_c)
+def java_client_thread(message, host, port_c):
+    communicate_with_java_server(message, host, port_c)
 
 if __name__ == "__main__":
-
-    message = "Hello, Servers!"
+    message = "Hello, Java Server!"
     host = "localhost"
-    
+    port_java = 6000  # Port for the Java server
+
     num_clients = 4000
-    server_name = "c_server_win"
+    server_name = "java"
     file_name = f"report_{server_name}_{num_clients}"
 
-    # Start C server
-    subprocess.Popen(["c_server_win.exe"])
-    # print("Started c server")
-    time.sleep(5)
-
-    
     # scaphandre json -s 0 -n 100000 -m 100 -f
     # command = "scaphandre json -n 100000000 -m 100 -f report_C_100000.json"
     command = "scaphandre json -n 100000 -f "+file_name+".json"
     process = subprocess.Popen(command,stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT, shell= True)
+
+    # Start Java server
+    subprocess.Popen(["java", "SimpleServer"])
+
     time.sleep(5)
 
-
-
-    port_c = 54321  # Port for the C server
-
-    c_threads = []    
+    java_threads = []
     start_time = timeit.default_timer()
 
-    # Start C threads
+    # print(f"sending from client")
+    # Start Java threads
     for i in range(1, num_clients + 1):
-        c_thread = threading.Thread(target=c_client_thread, args=(message, host, port_c))
-        c_threads.append(c_thread)
-        c_thread.start()
+        java_thread = threading.Thread(target=java_client_thread, args=(message, host, port_java))
+        java_threads.append(java_thread)
+        java_thread.start()
         # time.sleep(0.1)
 
-
-    # Wait for all C threads to complete
-    for c_thread in c_threads:
-        c_thread.join()
+    # Wait for all Java threads to complete
+    # print(f"waiting from server")
+    for java_thread in java_threads:
+        # print(f"thread from server")
+        java_thread.join()
 
     end_time = timeit.default_timer()
 
@@ -70,8 +64,9 @@ if __name__ == "__main__":
 
     # Then kill the process
     subprocess.run(f'taskkill /F /IM scaphandre.exe', shell=True)
-    # Then kill the server
-    subprocess.run(f'taskkill /F /IM c_server_win.exe', shell=True)
+
+    # # Then kill the server
+    subprocess.run(f'taskkill /F /IM java.exe', shell=True)
 
     json_file_path = f"c:\\phd\\Erlang\\{file_name}.json"
 
@@ -101,10 +96,11 @@ if __name__ == "__main__":
     final_consumption = average_energy * runtime
 
     # Write runtime and function name to the csv file
-    with open('c_output_nosleep.csv', 'a', newline='') as csv_file:
+    with open('java_output_nosleep.csv', 'a', newline='') as csv_file:
         csv_writer = csv.writer(csv_file, delimiter=';')
         # csv_writer.writerow(['Function', 'Average Runtime'])
         csv_writer.writerow([file_name, final_consumption, runtime])
+
 
     # Print the results
     # print("Total consumption of server_old.exe:", total_server_consumption)
