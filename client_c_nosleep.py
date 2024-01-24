@@ -1,5 +1,4 @@
 import csv
-import os
 import socket
 import subprocess
 import sys
@@ -12,32 +11,32 @@ import timeit
 # import psutil
 # import os
 
-def communicate_with_erlang_server(message, host, port):
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as erlang_socket:
-        erlang_socket.connect((host, port))
-        erlang_socket.sendall(message.encode())
-        erlang_socket.recv(1024).decode()
-        erlang_socket.close
-        # erlang_socket.recv(1024).decode()
-        # response = erlang_socket.recv(1024).decode()
-        # print(f"Received from Erlang server: {response}")
+def communicate_with_c_server(message, host, port):
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as c_socket:
+        c_socket.connect((host, port))
+        c_socket.sendall(message.encode())
+        c_socket.recv(1024)
+        # response = c_socket.recv(1024)
+        # print(f"Received from C server: {response}")
 
-def erlang_client_thread(message, host, port_erlang):
-    # print(f"Erlang Client sending message: {message}")
-    communicate_with_erlang_server(message, host, port_erlang)
+def c_client_thread(message, host, port_c):
+    # print(f"C Client sending message: {message}")
+    communicate_with_c_server(message, host, port_c)
 
 if __name__ == "__main__":
+
     message = "Hello, Servers!"
     host = "localhost"
-
+    
     num_clients = 4000
-    server_name = "erl"
+    server_name = "c_server_win"
     file_name = f"report_{server_name}_{num_clients}"
 
-    # Start Erlang server
-    erl_server_command =  "erl -noshell -run echo_server_prod"
-    erl_proc = subprocess.Popen(erl_server_command, shell=True)
+    # Start C server
+    subprocess.Popen(["c_server_win.exe"])
+    # print("Started c server")
     time.sleep(5)
+
     
     # scaphandre json -s 0 -n 100000 -m 100 -f
     # command = "scaphandre json -n 100000000 -m 100 -f report_C_100000.json"
@@ -45,30 +44,34 @@ if __name__ == "__main__":
     process = subprocess.Popen(command,stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT, shell= True)
     time.sleep(5)
 
-    port_erlang = 12345  # Port for the Erlang server
 
-    erlang_threads = []
+
+    port_c = 54321  # Port for the C server
+
+    c_threads = []    
     start_time = timeit.default_timer()
-    
-    # Start Erlang threads concurrently
+
+    # Start C threads
     for i in range(1, num_clients + 1):
-        erlang_thread = threading.Thread(target=erlang_client_thread, args=(message, host, port_erlang))
-        erlang_threads.append(erlang_thread)
-        erlang_thread.start()
-        time.sleep(0.1)
-    
-    # Wait for all Erlang threads to complete
-    for erlang_thread in erlang_threads:
-        erlang_thread.join()
+        c_thread = threading.Thread(target=c_client_thread, args=(message, host, port_c))
+        c_threads.append(c_thread)
+        c_thread.start()
+        # time.sleep(0.1)
+
+
+    # Wait for all C threads to complete
+    for c_thread in c_threads:
+        c_thread.join()
 
     end_time = timeit.default_timer()
 
-    runtime = end_time - start_time - (num_clients * 0.1)
+    # runtime = end_time - start_time - (num_clients * 0.1)
+    runtime = end_time - start_time
 
     # Then kill the process
     subprocess.run(f'taskkill /F /IM scaphandre.exe', shell=True)
-    # # Then kill the process
-    subprocess.run(f'taskkill /F /IM erl.exe', shell=True)
+    # Then kill the server
+    subprocess.run(f'taskkill /F /IM c_server_win.exe', shell=True)
 
     json_file_path = f"c:\\phd\\Erlang\\{file_name}.json"
 
@@ -97,14 +100,14 @@ if __name__ == "__main__":
 
     final_consumption = average_energy * runtime
 
-    # Print the results
-    # print("Total consumption of server_old.exe:", total_server_consumption)
-
     # Write runtime and function name to the csv file
-    with open('erlang_output.csv', 'a', newline='') as csv_file:
+    with open('c_output.csv', 'a', newline='') as csv_file:
         csv_writer = csv.writer(csv_file, delimiter=';')
         # csv_writer.writerow(['Function', 'Average Runtime'])
         csv_writer.writerow([file_name, final_consumption, runtime])
+
+    # Print the results
+    # print("Total consumption of server_old.exe:", total_server_consumption)
 
     # # Open the file in write mode ('w')
     # with open(file_name+'.txt', 'w') as f:

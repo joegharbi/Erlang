@@ -28,7 +28,7 @@ if __name__ == "__main__":
     message = "Hello, Servers!"
     host = "localhost"
     
-    num_clients = 10000
+    num_clients = 4000
     server_name = "c_server_win"
     file_name = f"report_{server_name}_{num_clients}"
 

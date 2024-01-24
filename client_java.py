@@ -26,7 +26,7 @@ if __name__ == "__main__":
     host = "localhost"
     port_java = 6000  # Port for the Java server
 
-    num_clients = 10000
+    num_clients = 4000
     server_name = "java"
     file_name = f"report_{server_name}_{num_clients}"
 

@@ -55,7 +55,7 @@ if __name__ == "__main__":
         erlang_thread = threading.Thread(target=erlang_client_thread, args=(message, host, port_erlang))
         erlang_threads.append(erlang_thread)
         erlang_thread.start()
-        time.sleep(0.1)
+        # time.sleep(0.1)
     
     # Wait for all Erlang threads to complete
     for erlang_thread in erlang_threads:
@@ -63,7 +63,8 @@ if __name__ == "__main__":
 
     end_time = timeit.default_timer()
 
-    runtime = end_time - start_time - (num_clients * 0.1)
+    # runtime = end_time - start_time - (num_clients * 0.1)
+    runtime = end_time - start_time
 
     # Then kill the process
     subprocess.run(f'taskkill /F /IM scaphandre.exe', shell=True)
