@@ -12,10 +12,10 @@ def communicate_with_java_server(message, host, port):
         java_socket.connect((host, port))
         java_socket.sendall(message.encode())
         java_socket.shutdown(socket.SHUT_WR)
-        # java_socket.recv(1024)
-        response = java_socket.recv(1024)
+        java_socket.recv(1024)
+        # response = java_socket.recv(1024)
         # response = response.rstrip(b'\n')
-        print(f"Received from Java server: {response}")
+        # print(f"Received from Java server: {response}")
         java_socket.close()
 
 def java_client_thread(message, host, port_c):
