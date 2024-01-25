@@ -15,9 +15,9 @@ def communicate_with_c_server(message, host, port):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as c_socket:
         c_socket.connect((host, port))
         c_socket.sendall(message.encode())
-        # c_socket.recv(1024)
-        response = c_socket.recv(1024)
-        print(f"Received from C server: {response}")
+        c_socket.recv(1024)
+        # response = c_socket.recv(1024)
+        # print(f"Received from C server: {response}")
         c_socket.close
 
 def c_client_thread(message, host, port_c):
@@ -57,7 +57,7 @@ if __name__ == "__main__":
         c_thread = threading.Thread(target=c_client_thread, args=(message, host, port_c))
         c_threads.append(c_thread)
         c_thread.start()
-        # time.sleep(0.1)
+        time.sleep(0.1)
 
 
     # Wait for all C threads to complete
@@ -67,7 +67,7 @@ if __name__ == "__main__":
     end_time = timeit.default_timer()
 
     # runtime = end_time - start_time 
-    runtime = end_time - start_time
+    runtime = end_time - start_time -(num_clients * 0.1)
 
     # Then kill the process
     subprocess.run(f'taskkill /F /IM scaphandre.exe', shell=True)

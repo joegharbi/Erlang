@@ -16,11 +16,10 @@ def communicate_with_erlang_server(message, host, port):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as erlang_socket:
         erlang_socket.connect((host, port))
         erlang_socket.sendall(message.encode())
-        # erlang_socket.recv(1024).decode()
-        response = erlang_socket.recv(1024).decode()
-        print(f"Received from Erlang server: {response}")
+        erlang_socket.recv(1024).decode()
+        # response = erlang_socket.recv(1024).decode()
+        # print(f"Received from Erlang server: {response}")
         erlang_socket.close
-        # erlang_socket.recv(1024).decode()
 
 def erlang_client_thread(message, host, port_erlang):
     # print(f"Erlang Client sending message: {message}")
@@ -55,14 +54,14 @@ if __name__ == "__main__":
         erlang_thread = threading.Thread(target=erlang_client_thread, args=(message, host, port_erlang))
         erlang_threads.append(erlang_thread)
         erlang_thread.start()
-        # time.sleep(0.1)
+        time.sleep(0.1)
     # Wait for all Erlang threads to complete
     for erlang_thread in erlang_threads:
         erlang_thread.join()
 
     end_time = timeit.default_timer()
 
-    runtime = end_time - start_time 
+    runtime = end_time - start_time - (num_clients * 0.1)
 
     # Then kill the process
     subprocess.run(f'taskkill /F /IM scaphandre.exe', shell=True)

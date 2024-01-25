@@ -52,7 +52,7 @@ if __name__ == "__main__":
         java_thread = threading.Thread(target=java_client_thread, args=(message, host, port_java))
         java_threads.append(java_thread)
         java_thread.start()
-        # time.sleep(0.1)
+        time.sleep(0.1)
 
     # Wait for all Java threads to complete
     # print(f"waiting from server")
@@ -62,7 +62,7 @@ if __name__ == "__main__":
 
     end_time = timeit.default_timer()
 
-    runtime = end_time - start_time 
+    runtime = end_time - start_time -(num_clients * 0.1)
 
     # Then kill the process
     subprocess.run(f'taskkill /F /IM scaphandre.exe', shell=True)
