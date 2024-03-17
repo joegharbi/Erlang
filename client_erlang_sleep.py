@@ -68,7 +68,8 @@ if __name__ == "__main__":
     # # Then kill the process
     subprocess.run(f'taskkill /F /IM erl.exe', shell=True)
 
-    json_file_path = f"c:\\phd\\New Folder\\Erlang\\{file_name}.json"
+    current_path = os.getcwd()
+    json_file_path = os.path.join(current_path, f"{file_name}.json")
 
     # Read JSON data from the file
     with open(json_file_path, "r") as file:
