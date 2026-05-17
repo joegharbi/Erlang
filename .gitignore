@@ -1,10 +1,26 @@
 .vscode/*
 .git/*
+
+# Erlang
 *.beam
 erl_crash.dump
-*.exe
-*.json
+
+# Java/C build outputs
 *.class
-# *.csv
-# *.dat
-# *tex
+*.exe
+*.o
+*.obj
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Temporary measurement artifacts
+*.json
+*.log
+results/generated/
+results/tmp/
+
+# OS/editor noise
+.DS_Store
+Thumbs.db

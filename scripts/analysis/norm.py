@@ -1,7 +1,12 @@
 import csv
+from pathlib import Path
+
+REPO_ROOT = Path(__file__).resolve().parents[2]
+DATA_FILE = REPO_ROOT / "results/benchmark_outputs/data.csv"
+OUTPUT_FILE = REPO_ROOT / "results/benchmark_outputs/normalized_data.csv"
 
 # Read the data from the CSV file
-with open('data.csv', 'r') as f:
+with open(DATA_FILE, 'r') as f:
     reader = csv.reader(f, delimiter=';')
     data = list(reader)
 
@@ -21,6 +26,6 @@ for row in data:
         row[4] = str(float(row[4]) / c_runtime if c_runtime else 'NA')  # Normalize runtime
 
 # Write the normalized data to a new CSV file
-with open('normalized_data.csv', 'w', newline='') as f:
+with open(OUTPUT_FILE, 'w', newline='') as f:
     writer = csv.writer(f, delimiter=';')
     writer.writerows(data)
