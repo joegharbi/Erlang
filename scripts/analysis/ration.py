@@ -1,7 +1,12 @@
 import pandas as pd
+from pathlib import Path
+
+REPO_ROOT = Path(__file__).resolve().parents[2]
+DATA_FILE = REPO_ROOT / "results/benchmark_outputs/data.csv"
+OUTPUT_FILE = REPO_ROOT / "results/benchmark_outputs/ration1.csv"
 
 # Read the CSV file
-df = pd.read_csv('data.csv', sep=';', header=None)
+df = pd.read_csv(DATA_FILE, sep=';', header=None)
 
 # Convert the third column from microjoules to joules
 df[3] = df[3] / 1e6
@@ -22,4 +27,4 @@ df[4] = df[4].round(3)
 df['new_column'] = df['new_column'].round(5)
 
 # Save the updated DataFrame back to a CSV file
-df.to_csv('ration1.csv', sep=';', header=False, index=False)
+df.to_csv(OUTPUT_FILE, sep=';', header=False, index=False)

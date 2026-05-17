@@ -1,4 +1,5 @@
 import csv
+import os
 import socket
 import subprocess
 import sys
@@ -6,71 +7,72 @@ import time
 import threading
 import json
 import timeit
+from pathlib import Path
+# import multiprocessing
+# import signal
+# import psutil
+# import os
 
-def communicate_with_java_server(message, host, port):
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as java_socket:
-        java_socket.connect((host, port))
-        java_socket.sendall(message.encode())
-        java_socket.shutdown(socket.SHUT_WR)
-        java_socket.recv(1024)
-        # response = java_socket.recv(1024)
-        # response = response.rstrip(b'\n')
-        # print(f"Received from Java server: {response}")
-        java_socket.close()
+def communicate_with_erlang_server(message, host, port):
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as erlang_socket:
+        erlang_socket.connect((host, port))
+        erlang_socket.sendall(message.encode())
+        erlang_socket.recv(1024).decode()
+        # response = erlang_socket.recv(1024).decode()
+        # print(f"Received from Erlang server: {response}")
+        erlang_socket.close
 
-def java_client_thread(message, host, port_c):
-    communicate_with_java_server(message, host, port_c)
+def erlang_client_thread(message, host, port_erlang):
+    # print(f"Erlang Client sending message: {message}")
+    communicate_with_erlang_server(message, host, port_erlang)
+
+REPO_ROOT = Path(__file__).resolve().parents[2]
 
 if __name__ == "__main__":
-    message = "Hello, Java Server!"
+    message = "Hello, Servers!"
     host = "localhost"
-    port_java = 6000  # Port for the Java server
 
     num_clients = 4000
-    server_name = "java"
+    server_name = "erl"
     file_name = f"report_{server_name}_{num_clients}"
 
-    # Start Java server
-    subprocess.Popen(["java", "SimpleServer"])
+    # Start Erlang server
+    erl_server_command = f'erl -pa "{REPO_ROOT / "benchmarks/erlang"}" -noshell -run echo_server_prod'
+    erl_proc = subprocess.Popen(erl_server_command, shell=True)
     time.sleep(5)
-
+    
     # scaphandre json -s 0 -n 100000 -m 100 -f
     # command = "scaphandre json -n 100000000 -m 100 -f report_C_100000.json"
     command = "scaphandre json -n 100000 -f "+file_name+".json"
     process = subprocess.Popen(command,stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT, shell= True)
-
-
-
     time.sleep(5)
 
-    java_threads = []
+    port_erlang = 12345  # Port for the Erlang server
+
+    erlang_threads = []
     start_time = timeit.default_timer()
-
-    # print(f"sending from client")
-    # Start Java threads
+    
+    # Start Erlang threads concurrently
     for i in range(1, num_clients + 1):
-        java_thread = threading.Thread(target=java_client_thread, args=(message, host, port_java))
-        java_threads.append(java_thread)
-        java_thread.start()
+        erlang_thread = threading.Thread(target=erlang_client_thread, args=(message, host, port_erlang))
+        erlang_threads.append(erlang_thread)
+        erlang_thread.start()
         time.sleep(0.1)
-
-    # Wait for all Java threads to complete
-    # print(f"waiting from server")
-    for java_thread in java_threads:
-        # print(f"thread from server")
-        java_thread.join()
+    # Wait for all Erlang threads to complete
+    for erlang_thread in erlang_threads:
+        erlang_thread.join()
 
     end_time = timeit.default_timer()
 
-    runtime = end_time - start_time -(num_clients * 0.1)
+    runtime = end_time - start_time - (num_clients * 0.1)
 
     # Then kill the process
     subprocess.run(f'taskkill /F /IM scaphandre.exe', shell=True)
+    # # Then kill the process
+    subprocess.run(f'taskkill /F /IM erl.exe', shell=True)
 
-    # # Then kill the server
-    subprocess.run(f'taskkill /F /IM java.exe', shell=True)
-
-    json_file_path = f"c:\\phd\\New Folder\\Erlang\\{file_name}.json"
+    current_path = os.getcwd()
+    json_file_path = os.path.join(current_path, f"{file_name}.json")
 
     # Read JSON data from the file
     with open(json_file_path, "r") as file:
@@ -97,15 +99,14 @@ if __name__ == "__main__":
 
     final_consumption = average_energy * runtime
 
+    # Print the results
+    # print("Total consumption of server_old.exe:", total_server_consumption)
+
     # Write runtime and function name to the csv file
-    with open('java_output.csv', 'a', newline='') as csv_file:
+    with open(REPO_ROOT / 'results/benchmark_outputs/erlang_output.csv', 'a', newline='') as csv_file:
         csv_writer = csv.writer(csv_file, delimiter=';')
         # csv_writer.writerow(['Function', 'Average Runtime'])
         csv_writer.writerow([file_name, final_consumption, runtime])
-
-
-    # Print the results
-    # print("Total consumption of server_old.exe:", total_server_consumption)
 
     # # Open the file in write mode ('w')
     # with open(file_name+'.txt', 'w') as f:

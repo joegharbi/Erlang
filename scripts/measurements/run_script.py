@@ -1,6 +1,10 @@
 import os
 import subprocess
 import time
+import sys
+from pathlib import Path
+
+SCRIPT_DIR = Path(__file__).resolve().parent
 
 # Run the first script and wait for it to finish
 print("---- Starting 1st measurement ----")
@@ -9,7 +13,7 @@ print("---- Starting 1st measurement ----")
 # c_proc = subprocess.Popen(c_server_command, shell= True)
 # time.sleep(5)
 
-subprocess.call(['python', 'client_c.py'])
+subprocess.call([sys.executable, str(SCRIPT_DIR / 'client_c.py')])
 print("---- Finished 1st measurement ----")
 time.sleep(5)
 
@@ -26,7 +30,7 @@ print("---- Starting 2nd measurement ----")
 
 # erl_command = "python client_erlang.py"
 # subprocess.Popen(erl_command, shell=True)
-subprocess.call(['python', 'client_erlang.py'])
+subprocess.call([sys.executable, str(SCRIPT_DIR / 'client_erlang_sleep.py')])
 print("---- Finished 2nd measurement ----")
 time.sleep(5)
 
@@ -39,7 +43,7 @@ print("---- Starting 3rd measurement ----")
 
 # erl_command = "python client_erlang.py"
 # subprocess.Popen(erl_command, shell=True)
-subprocess.call(['python', 'client_java.py'])
+subprocess.call([sys.executable, str(SCRIPT_DIR / 'client_java.py')])
 print("---- Finished 3rd measurement ----")
 time.sleep(5)
 
